@@ -1,3 +1,33 @@
+# Slashercash's fork of QMK Firmware
+
+## Custom Layouts
+* [daves-mac-switch](/keyboards/planck/ez/glow/keymaps/daves-mac-switch/)
+
+## Build Layouts
+
+- Use the documentation at [https://docs.qmk.fm/](https://docs.qmk.fm/) to set up your environment for building your firmware.
+- Make sure you've set up your environment per the [QMK docs](https://docs.qmk.fm/#/newbs_getting_started?id=set-up-your-environment) so compilation would actually work.
+- From your shell, make sure your working directory is qmk*firmware, then enter the command `make planck/ez/glow:_layout_`, substituting the name of the folder you created for "_layout_".
+
+## Keymappings for Mac
+
+| Target | DE-CH         | US           |
+|--------|---------------|--------------|
+| §      | < (de-CH)     | \ (de-CH)    |
+| @      | ˙ (pt)        |              |
+| ´      | ~ (de-CH)     | € (de-CH)    |
+| \      | ⁄ (pt)        |              |
+| ~      | ¬ (pt)        |              |
+| <      | < (se macOS)  |              |
+| >      | > (se macOS)  |              |
+| {      | [ (pt)        |              |
+| }      | ] (pt)        |              |
+| [      | ‰ (pt)        |              |
+| ]      | ¶ (pt)        |              |
+| ¨      |               | † (pt macOS) |
+
+---
+
 # ZSA's fork of QMK Firmware
 
 [![Current Version](https://img.shields.io/github/tag/zsa/qmk_firmware.svg)](https://github.com/zsa/qmk_firmware/tags)

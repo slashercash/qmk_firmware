@@ -1,7 +1,7 @@
 # Slashercash's fork of QMK Firmware
 
 ## Custom Keymaps
-* 
+- [winmac](/keyboards/planck/ez/glow/keymaps/winmac/) --> `make planck/ez/glow:winmac`
 
 ---
 

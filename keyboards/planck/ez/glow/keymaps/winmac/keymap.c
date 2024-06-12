@@ -3,6 +3,11 @@
 #include "muse.h"
 #endif
 #include "eeprom.h"
+#include "os_detection.h"
+
+enum custom_keycodes {
+  CKC_UMLAUTS
+};
 
 enum planck_keycodes {
   RGB_SLD = EZ_SAFE_RANGE,
@@ -40,7 +45,7 @@ enum planck_layers {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_BASE] = LAYOUT_planck_grid(
     KC_ESCAPE,      KC_Q,           KC_W,           KC_E,           KC_R,           KC_T,           KC_Z,           KC_U,           KC_I,           KC_O,           KC_P,           KC_BSPC,        
-    TD(DANCE_0),    KC_A,           KC_S,           KC_D,           KC_F,           KC_G,           KC_H,           KC_J,           KC_K,           KC_L,           OSL(7),         KC_DELETE,      
+    TD(DANCE_0),    KC_A,           KC_S,           KC_D,           KC_F,           KC_G,           KC_H,           KC_J,           KC_K,           KC_L,           CKC_UMLAUTS, KC_DELETE,      
     KC_LEFT_SHIFT,  KC_Y,           KC_X,           KC_C,           KC_V,           KC_B,           KC_N,           KC_M,           KC_COMMA,       KC_DOT,         KC_TRANSPARENT, KC_RIGHT_SHIFT, 
     KC_LEFT_CTRL,   KC_LEFT_ALT,    KC_LEFT_GUI,    MO(6),          MO(1),          KC_SPACE,       KC_NO,          MO(2),          TD(DANCE_1),    KC_TRANSPARENT, KC_TRANSPARENT, KC_ENTER
   ),
@@ -105,8 +110,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 bool left_shift_pressed = false;
 bool right_shift_pressed = false;
+bool umlauts = false;
+
+bool is_apple(void) {
+    os_variant_t host_os = detected_host_os();
+    return host_os == OS_MACOS || host_os == OS_IOS;
+}
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  if (umlauts && keycode != KC_A && keycode != KC_O && keycode != KC_U && keycode != KC_LEFT_SHIFT && keycode != KC_RIGHT_SHIFT) {
+    umlauts = false;
+  }
+
   switch (keycode) {
     case ST_MACRO_0:
     if (record->event.pressed) {
@@ -191,6 +206,60 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     } else {
         unregister_code(KC_SCLN);
         unregister_code(KC_DOT);
+    }
+    return false;
+
+    case CKC_UMLAUTS:
+    if (is_apple()) {
+        if (record->event.pressed) {
+            register_code16(LALT(KC_U));
+        } else {
+            unregister_code16(LALT(KC_U));
+        }
+    } else {
+        umlauts = true;
+    }
+    return false;
+
+    case KC_A:
+    case KC_O:
+    case KC_U:
+    if (!umlauts || is_apple()) {
+        if (record->event.pressed) {
+            register_code(keycode);
+        } else {
+            unregister_code(keycode);
+        }
+    } else if (record->event.pressed) {
+        if (left_shift_pressed || right_shift_pressed) {
+            unregister_code(KC_LEFT_SHIFT);
+            unregister_code(KC_RIGHT_SHIFT);
+            switch (keycode) {
+                case KC_A: SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_1) SS_TAP(X_KP_9) SS_TAP(X_KP_6) )); // Ä
+                break;
+                case KC_O: SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_2) SS_TAP(X_KP_1) SS_TAP(X_KP_4) )); // Ö
+                break;
+                case KC_U: SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_2) SS_TAP(X_KP_2) SS_TAP(X_KP_0) )); // Ü
+                break;
+            }
+        } else {
+            switch (keycode) {
+                case KC_A: SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_2) SS_TAP(X_KP_2) SS_TAP(X_KP_8) )); // ä
+                break;
+                case KC_O: SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_2) SS_TAP(X_KP_4) SS_TAP(X_KP_6) )); // ö
+                break;
+                case KC_U: SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_2) SS_TAP(X_KP_5) SS_TAP(X_KP_2) )); // ü
+                break;
+            }
+        }
+    } else {
+        if (left_shift_pressed) {
+            register_code(KC_LEFT_SHIFT);
+        }
+        if (right_shift_pressed) {
+            register_code(KC_RIGHT_SHIFT);
+        }
+        umlauts = false;
     }
     return false;
 

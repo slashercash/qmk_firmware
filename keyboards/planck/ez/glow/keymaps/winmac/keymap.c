@@ -103,8 +103,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 };
 
-
-
+bool left_shift_pressed = false;
+bool right_shift_pressed = false;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
@@ -138,6 +138,61 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_1) SS_TAP(X_KP_9) SS_TAP(X_KP_6) ));
     }
     break;
+
+    case KC_LEFT_SHIFT:
+    if (record->event.pressed) {
+        left_shift_pressed = true;
+        register_code(KC_LEFT_SHIFT);
+    } else {
+        left_shift_pressed = false;
+        unregister_code(KC_LEFT_SHIFT);
+    }
+    break;
+
+    case KC_RIGHT_SHIFT:
+    if (record->event.pressed) {
+        right_shift_pressed = true;
+        register_code(KC_RIGHT_SHIFT);
+    } else {
+        right_shift_pressed = false;
+        unregister_code(KC_RIGHT_SHIFT);
+    }
+    break;
+
+    case KC_COMMA:
+    if (record->event.pressed) {
+        if (left_shift_pressed || right_shift_pressed) {
+            unregister_code(KC_LEFT_SHIFT);
+            unregister_code(KC_RIGHT_SHIFT);
+            unregister_code(KC_COMMA);
+            register_code(KC_SCLN);
+        } else {
+            register_code(KC_COMMA);
+        }
+    } else {
+        if (left_shift_pressed) {
+            register_code(KC_LEFT_SHIFT);
+        }
+        if (right_shift_pressed) {
+            register_code(KC_RIGHT_SHIFT);
+        }
+        unregister_code(KC_COMMA);
+        unregister_code(KC_SCLN);
+    }
+    return false;
+
+    case KC_DOT:
+    if (record->event.pressed) {
+        if (left_shift_pressed || right_shift_pressed) {
+            register_code(KC_SCLN);
+        } else {
+            register_code(KC_DOT);
+        }
+    } else {
+        unregister_code(KC_SCLN);
+        unregister_code(KC_DOT);
+    }
+    return false;
 
     case RGB_SLD:
         if (rawhid_state.rgb_control) {

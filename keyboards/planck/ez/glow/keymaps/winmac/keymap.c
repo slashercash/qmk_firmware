@@ -7,8 +7,14 @@
 
 enum planck_keycodes {
   RGB_SLD = EZ_SAFE_RANGE,
-  CKC_UMLAUTS,
-  CKC_TAB_SWITCH,
+  KC_TAB_SWITCH,
+  OS_KC_UMLAUTS,
+  OS_KC_JUMP_SOL,
+  OS_KC_JUMP_EOL,
+  OS_KC_JUMP_WORD,
+  OS_KC_CLOSE_WINDOW,
+  OS_KC_SWITCH_WINDOW,
+  OS_KC_SNAP_WINDOW,
   ST_MACRO_0,
   ST_MACRO_1,
   ST_MACRO_2,
@@ -43,7 +49,7 @@ enum planck_layers {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_BASE] = LAYOUT_planck_grid(
     KC_ESCAPE,      KC_Q,           KC_W,           KC_E,           KC_R,           KC_T,           KC_Z,           KC_U,           KC_I,           KC_O,           KC_P,           KC_BSPC,        
-    TD(DANCE_0),    KC_A,           KC_S,           KC_D,           KC_F,           KC_G,           KC_H,           KC_J,           KC_K,           KC_L,           CKC_UMLAUTS, KC_DELETE,      
+    TD(DANCE_0),    KC_A,           KC_S,           KC_D,           KC_F,           KC_G,           KC_H,           KC_J,           KC_K,           KC_L,           OS_KC_UMLAUTS,  KC_DELETE,      
     KC_LEFT_SHIFT,  KC_Y,           KC_X,           KC_C,           KC_V,           KC_B,           KC_N,           KC_M,           KC_COMMA,       KC_DOT,         KC_TRANSPARENT, KC_RIGHT_SHIFT, 
     KC_LEFT_CTRL,   KC_LEFT_ALT,    KC_LEFT_GUI,    MO(6),          MO(1),          KC_SPACE,       KC_NO,          MO(2),          TD(DANCE_1),    KC_TRANSPARENT, KC_TRANSPARENT, KC_ENTER
   ),
@@ -56,10 +62,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [_RAISE] = LAYOUT_planck_grid(
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_HOME,        KC_UP,          KC_END,         KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, CKC_TAB_SWITCH, KC_LEFT_SHIFT,  KC_LEFT_CTRL,   KC_BRIGHTNESS_UP,KC_AUDIO_VOL_UP,KC_LEFT,        KC_DOWN,        KC_RIGHT,       KC_TRANSPARENT, LALT(KC_F4),    
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, LSFT(KC_TAB),   KC_BRIGHTNESS_DOWN,KC_AUDIO_VOL_DOWN,KC_TAB,         KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_LEFT_ALT,    KC_LEFT_GUI,    KC_NO,          KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT
+    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,   KC_TRANSPARENT, KC_TRANSPARENT, OS_KC_JUMP_SOL, KC_UP,          OS_KC_JUMP_EOL, KC_TRANSPARENT, KC_TRANSPARENT, 
+    KC_TRANSPARENT, KC_TRANSPARENT, KC_TAB_SWITCH,  KC_LEFT_SHIFT,  OS_KC_JUMP_WORD,  KC_BRIGHTNESS_UP,KC_AUDIO_VOL_UP,KC_LEFT,        KC_DOWN,        KC_RIGHT,       KC_TRANSPARENT, OS_KC_CLOSE_WINDOW, 
+    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, LSFT(KC_TAB),     KC_BRIGHTNESS_DOWN,KC_AUDIO_VOL_DOWN,KC_TAB,         KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
+    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, OS_KC_SWITCH_WINDOW, OS_KC_SNAP_WINDOW,       KC_NO,          KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT
   ),
 
   [_ADJUST] = LAYOUT_planck_grid(
@@ -153,7 +159,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     break;
 
-    case CKC_TAB_SWITCH:
+    case KC_TAB_SWITCH:
     if (record->event.pressed) {
         tab_switch = true;
     } else {
@@ -237,7 +243,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     return false;
 
-    case CKC_UMLAUTS:
+    case OS_KC_UMLAUTS:
     if (is_apple()) {
         if (record->event.pressed) {
             register_code16(LALT(KC_U));
@@ -246,6 +252,131 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
     } else {
         umlauts = true;
+    }
+    return false;
+
+    case OS_KC_JUMP_SOL:
+    if (is_apple()) {
+        if (record->event.pressed) {
+            register_code16(LGUI(KC_LEFT));
+        } else {
+            unregister_code16(LGUI(KC_LEFT));
+        }
+    } else {
+        if (record->event.pressed) {
+            register_code(KC_HOME);
+        } else {
+            unregister_code(KC_HOME);
+        }
+    }
+    return false;
+
+    case OS_KC_JUMP_EOL:
+    if (is_apple()) {
+        if (record->event.pressed) {
+            register_code16(LGUI(KC_RIGHT));
+        } else {
+            unregister_code16(LGUI(KC_RIGHT));
+        }
+    } else {
+        if (record->event.pressed) {
+            register_code(KC_END);
+        } else {
+            unregister_code(KC_END);
+        }
+    }
+    return false;
+
+    case OS_KC_JUMP_WORD:
+    ;
+    uint8_t code1 = 0;
+    if (is_apple()) {
+        code1 = KC_LEFT_ALT;
+    } else {
+        code1 = KC_LEFT_CTRL;
+    }
+    if (record->event.pressed) {
+        register_code(code1);
+    } else {
+        unregister_code(code1);
+    }
+    break;
+
+    case OS_KC_CLOSE_WINDOW:
+    ;
+    uint16_t code = 0;
+    if (is_apple()) {
+        code = LGUI(KC_Q);
+    } else {
+        code = LALT(KC_F4);
+    }
+    if (record->event.pressed) {
+        register_code16(code);
+    } else {
+        unregister_code16(code);
+    }
+    break;
+
+    case OS_KC_SWITCH_WINDOW:
+    ;
+    uint8_t code2 = 0;
+    if (is_apple()) {
+        code2 = KC_LEFT_GUI;
+    } else {
+        code2 = KC_LEFT_ALT;
+    }
+    if (record->event.pressed) {
+        register_code(code2);
+    } else {
+        unregister_code(code2);
+    }
+    break;
+
+    case OS_KC_SNAP_WINDOW:
+    if (is_apple()) {
+        if (record->event.pressed) {
+            register_code(KC_LEFT_CTRL);
+            register_code(KC_LEFT_ALT);
+        } else {
+            unregister_code(KC_LEFT_CTRL);
+            unregister_code(KC_LEFT_ALT);
+        }
+    } else {
+        if (record->event.pressed) {
+            register_code(KC_LEFT_GUI);
+        } else {
+            unregister_code(KC_LEFT_GUI);
+        }
+    }
+    break;
+
+    case KC_LEFT_CTRL:
+    ;
+    uint8_t code3 = 0;
+    if (is_apple()) {
+        code3 = KC_LEFT_GUI;
+    } else {
+        code3 = KC_LEFT_CTRL;
+    }
+    if (record->event.pressed) {
+        register_code(code3);
+    } else {
+        unregister_code(code3);
+    }
+    return false;
+
+    case KC_LEFT_GUI:
+    ;
+    uint8_t code4 = 0;
+    if (is_apple()) {
+        code4 = KC_LEFT_CTRL;
+    } else {
+        code4 = KC_LEFT_GUI;
+    }
+    if (record->event.pressed) {
+        register_code(code4);
+    } else {
+        unregister_code(code4);
     }
     return false;
 

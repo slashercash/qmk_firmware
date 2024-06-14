@@ -67,14 +67,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 };
 
-bool left_shift_pressed = false;
-bool right_shift_pressed = false;
+bool left_shift = false;
+bool right_shift = false;
 bool umlauts = false;
 bool tab_switch = false;
 
 bool is_apple(void) {
     os_variant_t host_os = detected_host_os();
     return host_os == OS_MACOS || host_os == OS_IOS;
+}
+
+uint8_t code_by_os(uint8_t apple, uint8_t other) {
+    if (is_apple()) {
+        return apple;
+    }
+    return other;
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -133,46 +140,36 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     case ST_MACRO_4: // JUMP_WORD
     ;
-    uint8_t code1 = 0;
-    if (is_apple()) {
-        code1 = KC_LEFT_ALT;
-    } else {
-        code1 = KC_LEFT_CTRL;
-    }
+    uint8_t KC_JUMP_WORD = code_by_os(KC_LEFT_ALT, KC_LEFT_CTRL);
     if (record->event.pressed) {
-        register_code(code1);
+        register_code(KC_JUMP_WORD);
     } else {
-        unregister_code(code1);
+        unregister_code(KC_JUMP_WORD);
     }
     break;
 
     case ST_MACRO_5: // CLOSE_APP
     ;
-    uint16_t code = 0;
+    uint16_t KC_CLOSE_APP = 0;
     if (is_apple()) {
-        code = LGUI(KC_Q);
+        KC_CLOSE_APP = LGUI(KC_Q);
     } else {
-        code = LALT(KC_F4);
+        KC_CLOSE_APP = LALT(KC_F4);
     }
     if (record->event.pressed) {
-        register_code16(code);
+        register_code16(KC_CLOSE_APP);
     } else {
-        unregister_code16(code);
+        unregister_code16(KC_CLOSE_APP);
     }
     break;
 
     case ST_MACRO_6: // SWITCH_APP
     ;
-    uint8_t code2 = 0;
-    if (is_apple()) {
-        code2 = KC_LEFT_GUI;
-    } else {
-        code2 = KC_LEFT_ALT;
-    }
+    uint8_t KC_SWITCH_APP = code_by_os(KC_LEFT_GUI, KC_LEFT_ALT);
     if (record->event.pressed) {
-        register_code(code2);
+        register_code(KC_SWITCH_APP);
     } else {
-        unregister_code(code2);
+        unregister_code(KC_SWITCH_APP);
     }
     break;
 
@@ -197,16 +194,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case KC_LEFT:
     case KC_RIGHT:
     if (tab_switch) {
-        uint16_t code = 0;
+        uint16_t KC_TAB_SWITCH = 0;
         if (keycode == KC_LEFT) {
-            code = LCTL(KC_PAGE_UP);
+            KC_TAB_SWITCH = LCTL(KC_PAGE_UP);
         } else {
-            code = LCTL(KC_PAGE_DOWN);
+            KC_TAB_SWITCH = LCTL(KC_PAGE_DOWN);
         }
         if (record->event.pressed) {
-            register_code16(code);
+            register_code16(KC_TAB_SWITCH);
         } else {
-            unregister_code16(code);
+            unregister_code16(KC_TAB_SWITCH);
         }
     } else if (record->event.pressed) {
         register_code(keycode);
@@ -217,27 +214,27 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     case KC_LEFT_SHIFT:
     if (record->event.pressed) {
-        left_shift_pressed = true;
+        left_shift = true;
         register_code(KC_LEFT_SHIFT);
     } else {
-        left_shift_pressed = false;
+        left_shift = false;
         unregister_code(KC_LEFT_SHIFT);
     }
     break;
 
     case KC_RIGHT_SHIFT:
     if (record->event.pressed) {
-        right_shift_pressed = true;
+        right_shift = true;
         register_code(KC_RIGHT_SHIFT);
     } else {
-        right_shift_pressed = false;
+        right_shift = false;
         unregister_code(KC_RIGHT_SHIFT);
     }
     break;
 
     case KC_COMMA:
     if (record->event.pressed) {
-        if (left_shift_pressed || right_shift_pressed) {
+        if (left_shift || right_shift) {
             unregister_code(KC_LEFT_SHIFT);
             unregister_code(KC_RIGHT_SHIFT);
             unregister_code(KC_COMMA);
@@ -246,10 +243,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             register_code(KC_COMMA);
         }
     } else {
-        if (left_shift_pressed) {
+        if (left_shift) {
             register_code(KC_LEFT_SHIFT);
         }
-        if (right_shift_pressed) {
+        if (right_shift) {
             register_code(KC_RIGHT_SHIFT);
         }
         unregister_code(KC_COMMA);
@@ -259,7 +256,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     case KC_DOT:
     if (record->event.pressed) {
-        if (left_shift_pressed || right_shift_pressed) {
+        if (left_shift || right_shift) {
             register_code(KC_SCLN);
         } else {
             register_code(KC_DOT);
@@ -270,33 +267,23 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     return false;
 
-case KC_LEFT_CTRL:
+    case KC_LEFT_CTRL:
     ;
-    uint8_t code3 = 0;
-    if (is_apple()) {
-        code3 = KC_LEFT_GUI;
-    } else {
-        code3 = KC_LEFT_CTRL;
-    }
+    uint8_t KC_LEFT_CTRL_BY_OS = code_by_os(KC_LEFT_GUI, KC_LEFT_CTRL);
     if (record->event.pressed) {
-        register_code(code3);
+        register_code(KC_LEFT_CTRL_BY_OS);
     } else {
-        unregister_code(code3);
+        unregister_code(KC_LEFT_CTRL_BY_OS);
     }
     return false;
 
     case KC_LEFT_GUI:
     ;
-    uint8_t code4 = 0;
-    if (is_apple()) {
-        code4 = KC_LEFT_CTRL;
-    } else {
-        code4 = KC_LEFT_GUI;
-    }
+    uint8_t KC_LEFT_GUI_BY_OS = code_by_os(KC_LEFT_CTRL, KC_LEFT_GUI);
     if (record->event.pressed) {
-        register_code(code4);
+        register_code(KC_LEFT_GUI_BY_OS);
     } else {
-        unregister_code(code4);
+        unregister_code(KC_LEFT_GUI_BY_OS);
     }
     return false;
 
@@ -310,7 +297,7 @@ case KC_LEFT_CTRL:
             unregister_code(keycode);
         }
     } else if (record->event.pressed) {
-        if (left_shift_pressed || right_shift_pressed) {
+        if (left_shift || right_shift) {
             unregister_code(KC_LEFT_SHIFT);
             unregister_code(KC_RIGHT_SHIFT);
             switch (keycode) {
@@ -332,10 +319,10 @@ case KC_LEFT_CTRL:
             }
         }
     } else {
-        if (left_shift_pressed) {
+        if (left_shift) {
             register_code(KC_LEFT_SHIFT);
         }
-        if (right_shift_pressed) {
+        if (right_shift) {
             register_code(KC_RIGHT_SHIFT);
         }
         umlauts = false;
@@ -353,76 +340,6 @@ case KC_LEFT_CTRL:
   }
   return true;
 }
-
-#ifdef AUDIO_ENABLE
-bool muse_mode = false;
-uint8_t last_muse_note = 0;
-uint16_t muse_counter = 0;
-uint8_t muse_offset = 70;
-uint16_t muse_tempo = 50;
-
-void encoder_update(bool clockwise) {
-    if (muse_mode) {
-        if (IS_LAYER_ON(_RAISE)) {
-            if (clockwise) {
-                muse_offset++;
-            } else {
-                muse_offset--;
-            }
-        } else {
-            if (clockwise) {
-                muse_tempo+=1;
-            } else {
-                muse_tempo-=1;
-            }
-        }
-    } else {
-        if (clockwise) {
-        #ifdef MOUSEKEY_ENABLE
-            register_code(KC_MS_WH_DOWN);
-            unregister_code(KC_MS_WH_DOWN);
-        #else
-            register_code(KC_PGDN);
-            unregister_code(KC_PGDN);
-        #endif
-        } else {
-        #ifdef MOUSEKEY_ENABLE
-            register_code(KC_MS_WH_UP);
-            unregister_code(KC_MS_WH_UP);
-        #else
-            register_code(KC_PGUP);
-            unregister_code(KC_PGUP);
-        #endif
-        }
-    }
-}
-
-void matrix_scan_user(void) {
-#ifdef AUDIO_ENABLE
-    if (muse_mode) {
-        if (muse_counter == 0) {
-            uint8_t muse_note = muse_offset + SCALE[muse_clock_pulse()];
-            if (muse_note != last_muse_note) {
-                stop_note(compute_freq_for_midi_note(last_muse_note));
-                play_note(compute_freq_for_midi_note(muse_note), 0xF);
-                last_muse_note = muse_note;
-            }
-        }
-        muse_counter = (muse_counter + 1) % muse_tempo;
-    }
-#endif
-}
-
-bool music_mask_user(uint16_t keycode) {
-    switch (keycode) {
-    case RAISE:
-    case LOWER:
-        return false;
-    default:
-        return true;
-    }
-}
-#endif
 
 uint8_t layer_state_set_user(uint8_t state) {
     return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);

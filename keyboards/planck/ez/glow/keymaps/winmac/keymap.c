@@ -5,12 +5,10 @@
 #include "eeprom.h"
 #include "os_detection.h"
 
-enum custom_keycodes {
-  CKC_UMLAUTS
-};
-
 enum planck_keycodes {
   RGB_SLD = EZ_SAFE_RANGE,
+  CKC_UMLAUTS,
+  CKC_TAB_SWITCH,
   ST_MACRO_0,
   ST_MACRO_1,
   ST_MACRO_2,
@@ -59,7 +57,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_RAISE] = LAYOUT_planck_grid(
     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_HOME,        KC_UP,          KC_END,         KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, MO(7),          KC_LEFT_SHIFT,  KC_LEFT_CTRL,   KC_BRIGHTNESS_UP,KC_AUDIO_VOL_UP,KC_LEFT,        KC_DOWN,        KC_RIGHT,       KC_TRANSPARENT, LALT(KC_F4),    
+    KC_TRANSPARENT, KC_TRANSPARENT, CKC_TAB_SWITCH, KC_LEFT_SHIFT,  KC_LEFT_CTRL,   KC_BRIGHTNESS_UP,KC_AUDIO_VOL_UP,KC_LEFT,        KC_DOWN,        KC_RIGHT,       KC_TRANSPARENT, LALT(KC_F4),    
     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, LSFT(KC_TAB),   KC_BRIGHTNESS_DOWN,KC_AUDIO_VOL_DOWN,KC_TAB,         KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_LEFT_ALT,    KC_LEFT_GUI,    KC_NO,          KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT
   ),
@@ -111,6 +109,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 bool left_shift_pressed = false;
 bool right_shift_pressed = false;
 bool umlauts = false;
+bool tab_switch = false;
 
 bool is_apple(void) {
     os_variant_t host_os = detected_host_os();
@@ -153,6 +152,35 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_1) SS_TAP(X_KP_9) SS_TAP(X_KP_6) ));
     }
     break;
+
+    case CKC_TAB_SWITCH:
+    if (record->event.pressed) {
+        tab_switch = true;
+    } else {
+        tab_switch = false;
+    }
+    break;
+
+    case KC_LEFT:
+    case KC_RIGHT:
+    if (tab_switch) {
+        uint16_t code = 0;
+        if (keycode == KC_LEFT) {
+            code = LCTL(KC_PAGE_UP);
+        } else {
+            code = LCTL(KC_PAGE_DOWN);
+        }
+        if (record->event.pressed) {
+            register_code16(code);
+        } else {
+            unregister_code16(code);
+        }
+    } else if (record->event.pressed) {
+        register_code(keycode);
+    } else {
+        unregister_code(keycode);
+    }
+    return false;
 
     case KC_LEFT_SHIFT:
     if (record->event.pressed) {

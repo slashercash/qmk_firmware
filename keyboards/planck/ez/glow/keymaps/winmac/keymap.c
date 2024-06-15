@@ -32,7 +32,7 @@ enum planck_layers {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_BASE] = LAYOUT_planck_grid(
     KC_ESCAPE,      KC_Q,           KC_W,           KC_E,           KC_R,           KC_T,           KC_Z,           KC_U,           KC_I,           KC_O,           KC_P,           KC_BSPC,        
-    KC_TRANSPARENT, KC_A,           KC_S,           KC_D,           KC_F,           KC_G,           KC_H,           KC_J,           KC_K,           KC_L,           ST_MACRO_0,     KC_DELETE,      
+    KC_TAB,         KC_A,           KC_S,           KC_D,           KC_F,           KC_G,           KC_H,           KC_J,           KC_K,           KC_L,           ST_MACRO_0,     KC_DELETE,      
     KC_LEFT_SHIFT,  KC_Y,           KC_X,           KC_C,           KC_V,           KC_B,           KC_N,           KC_M,           KC_COMMA,       KC_DOT,         KC_TRANSPARENT, KC_RIGHT_SHIFT, 
     KC_LEFT_CTRL,   KC_LEFT_ALT,    KC_LEFT_GUI,    MO(4),          MO(1),          KC_SPACE,       KC_NO,          MO(2),          KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_ENTER
   ),
@@ -47,8 +47,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_RAISE] = LAYOUT_planck_grid(
     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, ST_MACRO_1,     KC_UP,          ST_MACRO_2,     KC_TRANSPARENT, KC_TRANSPARENT, 
     KC_TRANSPARENT, KC_TRANSPARENT, ST_MACRO_3,     KC_LEFT_SHIFT,  ST_MACRO_4,     KC_TRANSPARENT, KC_TRANSPARENT, KC_LEFT,        KC_DOWN,        KC_RIGHT,       KC_TRANSPARENT, ST_MACRO_5,     
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, LSFT(KC_TAB),   KC_TRANSPARENT, KC_TRANSPARENT, KC_TAB,         KC_AUDIO_VOL_UP,KC_BRIGHTNESS_UP,KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, ST_MACRO_6,     ST_MACRO_7,     KC_NO,          KC_TRANSPARENT, KC_AUDIO_VOL_DOWN,KC_BRIGHTNESS_DOWN,KC_TRANSPARENT, KC_TRANSPARENT
+    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, ST_MACRO_6,     KC_AUDIO_VOL_UP,KC_BRIGHTNESS_UP,KC_TRANSPARENT, KC_TRANSPARENT, 
+    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, ST_MACRO_7,     KC_NO,          KC_TRANSPARENT, KC_AUDIO_VOL_DOWN,KC_BRIGHTNESS_DOWN,KC_TRANSPARENT, KC_TRANSPARENT
   ),
 
   [_ADJUST] = LAYOUT_planck_grid(
@@ -85,6 +85,10 @@ uint8_t code_by_os(uint8_t apple, uint8_t other) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  if (umlauts && keycode != KC_A && keycode != KC_O && keycode != KC_U && keycode != KC_LEFT_SHIFT && keycode != KC_RIGHT_SHIFT) {
+    umlauts = false;
+  }
+
   switch (keycode) {
     case ST_MACRO_0: // UMLAUTS
     if (is_apple()) {
@@ -168,8 +172,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     uint8_t KC_SWITCH_APP = code_by_os(KC_LEFT_GUI, KC_LEFT_ALT);
     if (record->event.pressed) {
         register_code(KC_SWITCH_APP);
+        register_code(KC_TAB);
     } else {
-        unregister_code(KC_SWITCH_APP);
+        unregister_code(KC_TAB);
     }
     break;
 
@@ -189,6 +194,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             unregister_code(KC_LEFT_GUI);
         }
     }
+    break;
+
+    case MO(2):
+    unregister_code(code_by_os(KC_LEFT_GUI, KC_LEFT_ALT));
     break;
 
     case KC_LEFT:

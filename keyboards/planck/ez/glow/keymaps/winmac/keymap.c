@@ -100,7 +100,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     } else {
         umlauts = true;
     }
-    return false;
+    break;
 
     case ST_MACRO_1: // JUMP_SOL
     if (is_apple()) {
@@ -116,7 +116,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             unregister_code(KC_HOME);
         }
     }
-    return false;
+    break;
 
     case ST_MACRO_2: // JUMP_EOL
     if (is_apple()) {
@@ -132,7 +132,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             unregister_code(KC_END);
         }
     }
-    return false;
+    break;
 
     case ST_MACRO_3: // SWITCH_TAB
     if (record->event.pressed) {
@@ -197,7 +197,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     break;
 
     case MO(2):
-    unregister_code(code_by_os(KC_LEFT_GUI, KC_LEFT_ALT));
+    if (!record->event.pressed) {
+        unregister_code(code_by_os(KC_LEFT_GUI, KC_LEFT_ALT));
+    }
     break;
 
     case KC_LEFT:
@@ -214,6 +216,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         } else {
             unregister_code16(KC_TAB_SWITCH);
         }
+        break;
     } else if (record->event.pressed) {
         register_code(keycode);
     } else {

@@ -16,6 +16,7 @@ enum planck_keycodes {
   ST_MACRO_6,
   ST_MACRO_7,
   ST_MACRO_8,
+  ST_MACRO_9,
 };
 
 
@@ -46,10 +47,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [_RAISE] = LAYOUT_planck_grid(
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_UP,          KC_TRANSPARENT, KC_TRANSPARENT, ST_MACRO_1,     
-    KC_TRANSPARENT, ST_MACRO_2,     ST_MACRO_3,     ST_MACRO_4,     ST_MACRO_5,     KC_TRANSPARENT, KC_TRANSPARENT, KC_LEFT,        KC_DOWN,        KC_RIGHT,       KC_TRANSPARENT, ST_MACRO_6,     
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, ST_MACRO_7,     KC_AUDIO_VOL_UP,KC_BRIGHTNESS_UP,KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, ST_MACRO_8,     KC_NO,          KC_TRANSPARENT, KC_AUDIO_VOL_DOWN,KC_BRIGHTNESS_DOWN,KC_TRANSPARENT, KC_TRANSPARENT
+    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, ST_MACRO_1,     KC_UP,          ST_MACRO_2,     KC_TRANSPARENT, ST_MACRO_3,     
+    KC_TRANSPARENT, ST_MACRO_4,     ST_MACRO_5,     ST_MACRO_6,     KC_LEFT_SHIFT,  KC_TRANSPARENT, KC_TRANSPARENT, KC_LEFT,        KC_DOWN,        KC_RIGHT,       KC_TRANSPARENT, ST_MACRO_7,     
+    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, ST_MACRO_8,     KC_AUDIO_VOL_UP,KC_BRIGHTNESS_UP,KC_TRANSPARENT, KC_TRANSPARENT, 
+    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, ST_MACRO_9,     KC_NO,          KC_TRANSPARENT, KC_AUDIO_VOL_DOWN,KC_BRIGHTNESS_DOWN,KC_TRANSPARENT, KC_TRANSPARENT
   ),
 
   [_ADJUST] = LAYOUT_planck_grid(
@@ -72,7 +73,6 @@ bool left_shift = false;
 bool right_shift = false;
 bool umlauts = false;
 bool tab_switch = false;
-bool jump_line = false;
 
 bool is_apple(void) {
     os_variant_t host_os = detected_host_os();
@@ -104,7 +104,39 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     break;
 
-    case ST_MACRO_1: // LOCK
+    case ST_MACRO_1: // JUMP_SOL
+    if (is_apple()) {
+        if (record->event.pressed) {
+            register_code16(LGUI(KC_LEFT));
+        } else {
+            unregister_code16(LGUI(KC_LEFT));
+        }
+    } else {
+        if (record->event.pressed) {
+            register_code(KC_HOME);
+        } else {
+            unregister_code(KC_HOME);
+        }
+    }
+    break;
+
+    case ST_MACRO_2: // JUMP_EOL
+    if (is_apple()) {
+        if (record->event.pressed) {
+            register_code16(LGUI(KC_RIGHT));
+        } else {
+            unregister_code16(LGUI(KC_RIGHT));
+        }
+    } else {
+        if (record->event.pressed) {
+            register_code(KC_END);
+        } else {
+            unregister_code(KC_END);
+        }
+    }
+    break;
+
+    case ST_MACRO_3: // LOCK
     if (is_apple()) {
         if (record->event.pressed) {
             register_code16(LCTL(LGUI(KC_Q)));
@@ -120,7 +152,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     break;
     
-    case ST_MACRO_2: // EXPOSE_APP
+    case ST_MACRO_4: // EXPOSE_APP
     if (is_apple()) {
         if (record->event.pressed) {
             register_code16(LALT(KC_DOWN));
@@ -136,7 +168,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     break;
 
-    case ST_MACRO_3: // SWITCH_TAB
+    case ST_MACRO_5: // SWITCH_TAB
     if (record->event.pressed) {
         tab_switch = true;
     } else {
@@ -144,15 +176,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     break;
 
-    case ST_MACRO_4: // JUMP_LINE
-    if (record->event.pressed) {
-        jump_line = true;
-    } else {
-        jump_line = false;
-    }
-    break;
-
-    case ST_MACRO_5: // JUMP_WORD
+    case ST_MACRO_6: // JUMP_WORD
     ;
     uint8_t KC_JUMP_WORD = code_by_os(KC_LEFT_ALT, KC_LEFT_CTRL);
     if (record->event.pressed) {
@@ -162,7 +186,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     break;
 
-    case ST_MACRO_6: // CLOSE_APP
+    case ST_MACRO_7: // CLOSE_APP
     ;
     uint16_t KC_CLOSE_APP = 0;
     if (is_apple()) {
@@ -177,7 +201,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     break;
 
-    case ST_MACRO_7: // SWITCH_APP
+    case ST_MACRO_8: // SWITCH_APP
     ;
     uint8_t KC_SWITCH_APP = code_by_os(KC_LEFT_GUI, KC_LEFT_ALT);
     if (record->event.pressed) {
@@ -188,7 +212,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     break;
 
-    case ST_MACRO_8: // SNAPP_APP
+    case ST_MACRO_9: // SNAPP_APP
     if (is_apple()) {
         if (record->event.pressed) {
             register_code(KC_LEFT_CTRL);
@@ -227,29 +251,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             unregister_code16(KC_TAB_SWITCH);
         }
         break;
-    } else if (jump_line) {
-        if (is_apple()) {
-            if (record->event.pressed) {
-                if (record->event.pressed) {
-                    register_code(LGUI(keycode));
-                } else {
-                    unregister_code(LGUI(keycode));
-                }
-            }
-        } else {
-            uint8_t KC_TAB_SWITCH = 0;
-            if (keycode == KC_LEFT) {
-                KC_TAB_SWITCH = KC_HOME;
-            } else {
-                KC_TAB_SWITCH = KC_END;
-            }
-            if (record->event.pressed) {
-                register_code(KC_TAB_SWITCH);
-            } else {
-                unregister_code(KC_TAB_SWITCH);
-            }
-        }
-        return false;
     } else if (record->event.pressed) {
         register_code(keycode);
     } else {

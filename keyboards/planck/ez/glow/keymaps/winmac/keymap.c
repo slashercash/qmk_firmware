@@ -15,6 +15,7 @@ enum planck_keycodes {
   ST_MACRO_5,
   ST_MACRO_6,
   ST_MACRO_7,
+  ST_MACRO_8,
 };
 
 
@@ -34,21 +35,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_ESCAPE,      KC_Q,           KC_W,           KC_E,           KC_R,           KC_T,           KC_Z,           KC_U,           KC_I,           KC_O,           KC_P,           KC_BSPC,        
     KC_TAB,         KC_A,           KC_S,           KC_D,           KC_F,           KC_G,           KC_H,           KC_J,           KC_K,           KC_L,           ST_MACRO_0,     KC_DELETE,      
     KC_LEFT_SHIFT,  KC_Y,           KC_X,           KC_C,           KC_V,           KC_B,           KC_N,           KC_M,           KC_COMMA,       KC_DOT,         KC_TRANSPARENT, KC_RIGHT_SHIFT, 
-    KC_LEFT_CTRL,   KC_LEFT_ALT,    KC_LEFT_GUI,    MO(4),          MO(1),          KC_SPACE,       KC_NO,          MO(2),          KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_ENTER
+    KC_LEFT_CTRL,   KC_LEFT_ALT,    KC_LEFT_GUI,    MO(4),          MO(1),          KC_SPACE,       KC_NO,          MO(2),          KC_TRANSPARENT, KC_TRANSPARENT, KC_PSCR,        KC_ENTER
   ),
 
   [_LOWER] = LAYOUT_planck_grid(
     KC_TRANSPARENT, KC_TRANSPARENT, KC_AT,          KC_HASH,        KC_PERC,        KC_AMPR,        KC_PIPE,        KC_EQUAL,       KC_DQUO,        KC_QUOTE,       KC_GRAVE,       KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_CIRC,        KC_EXLM,        KC_QUES,        KC_PLUS,        KC_MINUS,       KC_LPRN,        KC_RPRN,        KC_LABK,        KC_RABK,        KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TILD,        KC_BSLS,        KC_UNDS,        KC_DLR,         KC_ASTR,        KC_SLASH,       KC_LCBR,        KC_RCBR,        KC_LBRC,        KC_RBRC,        KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_SPACE,       KC_NO,          KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT
+    KC_TRANSPARENT, KC_TILD,        KC_CIRC,        KC_EXLM,        KC_QUES,        KC_PLUS,        KC_MINUS,       KC_LPRN,        KC_RPRN,        KC_LABK,        KC_RABK,        KC_TRANSPARENT, 
+    KC_TRANSPARENT, KC_TRANSPARENT, KC_BSLS,        KC_UNDS,        KC_DLR,         KC_ASTR,        KC_SLASH,       KC_LCBR,        KC_RCBR,        KC_LBRC,        KC_RBRC,        KC_TRANSPARENT, 
+    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_NO,          KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT
   ),
 
   [_RAISE] = LAYOUT_planck_grid(
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, ST_MACRO_1,     KC_UP,          ST_MACRO_2,     KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, ST_MACRO_3,     KC_LEFT_SHIFT,  ST_MACRO_4,     KC_TRANSPARENT, KC_TRANSPARENT, KC_LEFT,        KC_DOWN,        KC_RIGHT,       KC_TRANSPARENT, ST_MACRO_5,     
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, ST_MACRO_6,     KC_AUDIO_VOL_UP,KC_BRIGHTNESS_UP,KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, ST_MACRO_7,     KC_NO,          KC_TRANSPARENT, KC_AUDIO_VOL_DOWN,KC_BRIGHTNESS_DOWN,KC_TRANSPARENT, KC_TRANSPARENT
+    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_UP,          KC_TRANSPARENT, KC_TRANSPARENT, ST_MACRO_1,     
+    KC_TRANSPARENT, ST_MACRO_2,     ST_MACRO_3,     ST_MACRO_4,     ST_MACRO_5,     KC_TRANSPARENT, KC_TRANSPARENT, KC_LEFT,        KC_DOWN,        KC_RIGHT,       KC_TRANSPARENT, ST_MACRO_6,     
+    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, ST_MACRO_7,     KC_AUDIO_VOL_UP,KC_BRIGHTNESS_UP,KC_TRANSPARENT, KC_TRANSPARENT, 
+    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, ST_MACRO_8,     KC_NO,          KC_TRANSPARENT, KC_AUDIO_VOL_DOWN,KC_BRIGHTNESS_DOWN,KC_TRANSPARENT, KC_TRANSPARENT
   ),
 
   [_ADJUST] = LAYOUT_planck_grid(
@@ -62,7 +63,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_F1,          KC_F2,          KC_F3,          KC_F4,          KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
     KC_F5,          KC_F6,          KC_F7,          KC_F8,          KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_1,           KC_2,           KC_3,           KC_4,           KC_5,           
     KC_F9,          KC_F10,         KC_F11,         KC_F12,         KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_6,           KC_7,           KC_8,           KC_9,           KC_0,           
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_NO,          KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT
+    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_LEFT_SHIFT,  KC_NO,          KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT
   ),
 
 };
@@ -71,6 +72,7 @@ bool left_shift = false;
 bool right_shift = false;
 bool umlauts = false;
 bool tab_switch = false;
+bool jump_line = false;
 
 bool is_apple(void) {
     os_variant_t host_os = detected_host_os();
@@ -102,34 +104,34 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     break;
 
-    case ST_MACRO_1: // JUMP_SOL
+    case ST_MACRO_1: // LOCK
     if (is_apple()) {
         if (record->event.pressed) {
-            register_code16(LGUI(KC_LEFT));
+            register_code16(LCTL(LGUI(KC_Q)));
         } else {
-            unregister_code16(LGUI(KC_LEFT));
+            unregister_code16(LCTL(LGUI(KC_Q)));
         }
     } else {
         if (record->event.pressed) {
-            register_code(KC_HOME);
+            register_code16(LGUI(KC_L));
         } else {
-            unregister_code(KC_HOME);
+            unregister_code16(LGUI(KC_L));
         }
     }
     break;
-
-    case ST_MACRO_2: // JUMP_EOL
+    
+    case ST_MACRO_2: // EXPOSE_APP
     if (is_apple()) {
         if (record->event.pressed) {
-            register_code16(LGUI(KC_RIGHT));
+            register_code16(LALT(KC_DOWN));
         } else {
-            unregister_code16(LGUI(KC_RIGHT));
+            unregister_code16(LALT(KC_DOWN));
         }
     } else {
         if (record->event.pressed) {
-            register_code(KC_END);
+            register_code16(LGUI(KC_TAB));
         } else {
-            unregister_code(KC_END);
+            unregister_code16(LGUI(KC_TAB));
         }
     }
     break;
@@ -142,7 +144,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     break;
 
-    case ST_MACRO_4: // JUMP_WORD
+    case ST_MACRO_4: // JUMP_LINE
+    if (record->event.pressed) {
+        jump_line = true;
+    } else {
+        jump_line = false;
+    }
+    break;
+
+    case ST_MACRO_5: // JUMP_WORD
     ;
     uint8_t KC_JUMP_WORD = code_by_os(KC_LEFT_ALT, KC_LEFT_CTRL);
     if (record->event.pressed) {
@@ -152,7 +162,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     break;
 
-    case ST_MACRO_5: // CLOSE_APP
+    case ST_MACRO_6: // CLOSE_APP
     ;
     uint16_t KC_CLOSE_APP = 0;
     if (is_apple()) {
@@ -167,7 +177,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     break;
 
-    case ST_MACRO_6: // SWITCH_APP
+    case ST_MACRO_7: // SWITCH_APP
     ;
     uint8_t KC_SWITCH_APP = code_by_os(KC_LEFT_GUI, KC_LEFT_ALT);
     if (record->event.pressed) {
@@ -178,7 +188,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     break;
 
-    case ST_MACRO_7: // SNAPP_APP
+    case ST_MACRO_8: // SNAPP_APP
     if (is_apple()) {
         if (record->event.pressed) {
             register_code(KC_LEFT_CTRL);
@@ -217,6 +227,29 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             unregister_code16(KC_TAB_SWITCH);
         }
         break;
+    } else if (jump_line) {
+        if (is_apple()) {
+            if (record->event.pressed) {
+                if (record->event.pressed) {
+                    register_code(LGUI(keycode));
+                } else {
+                    unregister_code(LGUI(keycode));
+                }
+            }
+        } else {
+            uint8_t KC_TAB_SWITCH = 0;
+            if (keycode == KC_LEFT) {
+                KC_TAB_SWITCH = KC_HOME;
+            } else {
+                KC_TAB_SWITCH = KC_END;
+            }
+            if (record->event.pressed) {
+                register_code(KC_TAB_SWITCH);
+            } else {
+                unregister_code(KC_TAB_SWITCH);
+            }
+        }
+        return false;
     } else if (record->event.pressed) {
         register_code(keycode);
     } else {
@@ -313,21 +346,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             unregister_code(KC_LEFT_SHIFT);
             unregister_code(KC_RIGHT_SHIFT);
             switch (keycode) {
-                case KC_A: SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_1) SS_TAP(X_KP_9) SS_TAP(X_KP_6) )); // Ä
-                break;
-                case KC_O: SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_2) SS_TAP(X_KP_1) SS_TAP(X_KP_4) )); // Ö
-                break;
-                case KC_U: SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_2) SS_TAP(X_KP_2) SS_TAP(X_KP_0) )); // Ü
-                break;
+                case KC_A: SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_1) SS_TAP(X_KP_9) SS_TAP(X_KP_6) )); break; // Ä
+                case KC_O: SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_2) SS_TAP(X_KP_1) SS_TAP(X_KP_4) )); break; // Ö
+                case KC_U: SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_2) SS_TAP(X_KP_2) SS_TAP(X_KP_0) )); break; // Ü
             }
         } else {
             switch (keycode) {
-                case KC_A: SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_2) SS_TAP(X_KP_2) SS_TAP(X_KP_8) )); // ä
-                break;
-                case KC_O: SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_2) SS_TAP(X_KP_4) SS_TAP(X_KP_6) )); // ö
-                break;
-                case KC_U: SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_2) SS_TAP(X_KP_5) SS_TAP(X_KP_2) )); // ü
-                break;
+                case KC_A: SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_2) SS_TAP(X_KP_2) SS_TAP(X_KP_8) )); break; // ä
+                case KC_O: SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_2) SS_TAP(X_KP_4) SS_TAP(X_KP_6) )); break; // ö
+                case KC_U: SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_2) SS_TAP(X_KP_5) SS_TAP(X_KP_2) )); break; // ü
             }
         }
     } else {

@@ -1,3 +1,9 @@
+# Slashercash's Guides
+
+Build for planck: `make planck/ez/glow:winmac`
+
+then flash with QMK Toolbox ATmega32U4
+
 # Quantum Mechanical Keyboard Firmware
 
 [![Current Version](https://img.shields.io/github/tag/qmk/qmk_firmware.svg)](https://github.com/qmk/qmk_firmware/tags)

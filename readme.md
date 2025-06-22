@@ -1,6 +1,10 @@
 # Slashercash's Guides
 
-Build for planck: `make planck/ez/glow:winmac`
+Build: 
+```
+make planck/ez/glow:winmac
+make ymdk/ymd40/air40:winmac
+```
 
 then flash with QMK Toolbox ATmega32U4
 

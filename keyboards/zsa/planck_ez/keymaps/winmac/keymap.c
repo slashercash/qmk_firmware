@@ -22,9 +22,9 @@ enum planck_keycodes {
 
 enum planck_layers {
   _BASE,
-  _LOWER,
-  _RAISE,
-  _ADJUST,
+  _LAYER1,
+  _LAYER2,
+  _LAYER3,
   _LAYER4,
 };
 
@@ -33,38 +33,38 @@ enum planck_layers {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_BASE] = LAYOUT_planck_grid(
-    KC_ESCAPE,      KC_Q,           KC_W,           KC_E,           KC_R,           KC_T,           KC_Z,           KC_U,           KC_I,           KC_O,           KC_P,           KC_BSPC,        
-    KC_TAB,         KC_A,           KC_S,           KC_D,           KC_F,           KC_G,           KC_H,           KC_J,           KC_K,           KC_L,           ST_MACRO_0,     KC_DELETE,      
-    KC_LEFT_SHIFT,  KC_Y,           KC_X,           KC_C,           KC_V,           KC_B,           KC_N,           KC_M,           KC_COMMA,       KC_DOT,         KC_PSCR,        KC_RIGHT_SHIFT, 
-    KC_LEFT_CTRL,   KC_LEFT_ALT,    KC_LEFT_GUI,    MO(4),          MO(1),          KC_SPACE,       KC_NO,          MO(2),          KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_ENTER
+    KC_ESCAPE,        KC_Q,           KC_W,           KC_E,           KC_R,           KC_T,           KC_Z,           KC_U,           KC_I,           KC_O,               KC_P,             KC_BSPC,
+    KC_TAB,           KC_A,           KC_S,           KC_D,           KC_F,           KC_G,           KC_H,           KC_J,           KC_K,           KC_L,               ST_MACRO_0,       KC_DELETE,
+    KC_LEFT_SHIFT,    KC_Y,           KC_X,           KC_C,           KC_V,           KC_B,           KC_N,           KC_M,           KC_COMMA,       KC_DOT,             KC_PSCR,          KC_RIGHT_SHIFT,
+    KC_LEFT_CTRL,     KC_LEFT_ALT,    KC_LEFT_GUI,    MO(1),          MO(2),          KC_SPACE,       KC_NO,          MO(3),          MO(4),          KC_AUDIO_VOL_DOWN,  KC_AUDIO_VOL_UP,  KC_ENTER
   ),
 
-  [_LOWER] = LAYOUT_planck_grid(
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_AT,          KC_HASH,        KC_PERC,        KC_AMPR,        KC_PIPE,        KC_EQUAL,       KC_DQUO,        KC_QUOTE,       KC_GRAVE,       KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TILD,        KC_CIRC,        KC_EXLM,        KC_QUES,        KC_PLUS,        KC_MINUS,       KC_LPRN,        KC_RPRN,        KC_LABK,        KC_RABK,        KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_BSLS,        KC_UNDS,        KC_DLR,         KC_ASTR,        KC_SLASH,       KC_LCBR,        KC_RCBR,        KC_LBRC,        KC_RBRC,        KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_NO,          KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT
+  [_LAYER1] = LAYOUT_planck_grid(
+    KC_F1,            KC_F2,          KC_F3,          KC_F4,          _______,        _______,        _______,       KC_PLUS,         KC_MINUS,       KC_ASTR,            KC_SLASH,         _______,
+    KC_F5,            KC_F6,          KC_F7,          KC_F8,          _______,        _______,        _______,       KC_1,            KC_2,           KC_3,               KC_4,             KC_5,
+    KC_F9,            KC_F10,         KC_F11,         KC_F12,         _______,        _______,        _______,       KC_6,            KC_7,           KC_8,               KC_9,             KC_0,
+    _______,          _______,        _______,        _______,        _______,        KC_LEFT_SHIFT,  KC_NO,         _______,         _______,        _______,            _______,          _______
   ),
 
-  [_RAISE] = LAYOUT_planck_grid(
-    KC_TRANSPARENT, KC_TRANSPARENT,    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, ST_MACRO_1,     KC_UP,             ST_MACRO_2,         KC_TRANSPARENT, ST_MACRO_3,     
-    KC_TRANSPARENT, LALT(KC_LEFT_GUI), ST_MACRO_4,     ST_MACRO_5,     KC_LEFT_SHIFT,  KC_TRANSPARENT, KC_TRANSPARENT, KC_LEFT,        KC_DOWN,           KC_RIGHT,           ST_MACRO_6,     ST_MACRO_7,     
-    KC_TRANSPARENT, KC_TRANSPARENT,    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, ST_MACRO_8,     KC_AUDIO_VOL_UP,   KC_BRIGHTNESS_UP,   LALT(KC_TAB),   KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT,    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, ST_MACRO_9,     KC_NO,          KC_TRANSPARENT, KC_AUDIO_VOL_DOWN, KC_BRIGHTNESS_DOWN, KC_TRANSPARENT, KC_TRANSPARENT
+  [_LAYER2] = LAYOUT_planck_grid(
+    _______,          _______,        KC_AT,          KC_HASH,        KC_PERC,        KC_AMPR,        KC_PIPE,       KC_EQUAL,        KC_DQUO,        KC_QUOTE,           KC_GRAVE,         _______,
+    _______,          KC_TILD,        KC_CIRC,        KC_EXLM,        KC_QUES,        KC_PLUS,        KC_MINUS,      KC_LPRN,         KC_RPRN,        KC_LABK,            KC_RABK,          _______,
+    _______,          _______,        KC_BSLS,        KC_UNDS,        KC_DLR,         KC_ASTR,        KC_SLASH,      KC_LCBR,         KC_RCBR,        KC_LBRC,            KC_RBRC,          _______,
+    _______,          _______,        _______,        _______,        _______,        _______,        KC_NO,         _______,         _______,        _______,            _______,          _______
   ),
 
-  [_ADJUST] = LAYOUT_planck_grid(
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, RGB_HUD,        LED_LEVEL,      KC_TRANSPARENT, RGB_HUI,        KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, RGB_MODE_FORWARD,KC_NO,          KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT
+  [_LAYER3] = LAYOUT_planck_grid(
+    _______,          _______,        _______,        _______,        _______,        _______,        _______,       ST_MACRO_1,      KC_UP,          ST_MACRO_2,         _______,          ST_MACRO_3,
+    _______,          _______,        ST_MACRO_4,     ST_MACRO_5,     KC_LEFT_SHIFT,  _______,        _______,       KC_LEFT,         KC_DOWN,        KC_RIGHT,           _______,          ST_MACRO_7,
+    _______,          _______,        _______,        _______,        _______,        _______,        _______,       ST_MACRO_8,      ST_MACRO_6,     LALT(KC_TAB),       _______,          _______,
+    _______,          _______,        _______,        _______,        _______,        ST_MACRO_9,     KC_NO,         _______,         _______,        _______,            _______,          _______
   ),
 
   [_LAYER4] = LAYOUT_planck_grid(
-    KC_F1,          KC_F2,          KC_F3,          KC_F4,          KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_F5,          KC_F6,          KC_F7,          KC_F8,          KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_1,           KC_2,           KC_3,           KC_4,           KC_5,           
-    KC_F9,          KC_F10,         KC_F11,         KC_F12,         KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_6,           KC_7,           KC_8,           KC_9,           KC_0,           
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_LEFT_SHIFT,  KC_NO,          KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT
+    LED_LEVEL,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        KC_F13,         KC_F14,             KC_F15,           KC_F16,
+    RGB_MODE_FORWARD, RGB_HUI,        RGB_SAI,        RGB_VAI,        RGB_SPI,        _______,        _______,        _______,        KC_F17,         KC_F18,             KC_F19,           KC_F20,
+    RGB_MODE_REVERSE, RGB_HUD,        RGB_SAD,        RGB_VAD,        RGB_SPD,        _______,        _______,        _______,        KC_F21,         KC_F22,             KC_F23,           KC_F24,
+    RGB_TOG,          _______,        _______,        _______,        _______,        _______,        KC_NO,          _______,        _______,        KC_BRIGHTNESS_DOWN, KC_BRIGHTNESS_UP, _______
   ),
 
 };
@@ -236,7 +236,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     break;
 
-    case MO(2):
+    case MO(3):
     if (!record->event.pressed) {
         unregister_code(code_by_os(KC_LEFT_GUI, KC_LEFT_ALT));
     }
@@ -374,19 +374,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         umlauts = false;
     }
     return false;
-
-//    case RGB_SLD:
-//        if (layer_state.rgb_control) {
-//            return false;
-//        }
-//        if (record->event.pressed) {
-//            rgblight_mode(1);
-//        }
-//        return false;
   }
   return true;
-}
-
-uint8_t layer_state_set_user(uint8_t state) {
-    return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 }
